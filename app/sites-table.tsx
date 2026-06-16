@@ -101,17 +101,26 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                     <ProtectionBadge protectedSite={site.protected} />
                   </Td>
                   <Td>
-                    {site.connectorName ? (
-                      <div>
-                        <div className="text-xs font-medium">{site.connectorName}</div>
-                        {site.connectorIdp ? (
-                          <div className="font-mono text-[11px] text-black/45 dark:text-white/45">{site.connectorIdp}</div>
-                        ) : null}
+                    {site.connectorId ? (
+                      <div className="group/conn flex items-start gap-1.5">
+                        <div className="min-w-0">
+                          {site.connectorName ? (
+                            <>
+                              <div className="text-xs font-medium">{site.connectorName}</div>
+                              {site.connectorIdp ? (
+                                <div className="font-mono text-[11px] text-black/45 dark:text-white/45">
+                                  {site.connectorIdp}
+                                </div>
+                              ) : null}
+                            </>
+                          ) : (
+                            <span title={site.connectorId} className="font-mono text-[11px] text-black/55 dark:text-white/55">
+                              {site.connectorId.slice(0, 14)}…
+                            </span>
+                          )}
+                        </div>
+                        <CopyButton value={site.connectorId} />
                       </div>
-                    ) : site.connectorId ? (
-                      <span title={site.connectorId} className="font-mono text-[11px] text-black/55 dark:text-white/55">
-                        {site.connectorId.slice(0, 14)}…
-                      </span>
                     ) : (
                       <Dash />
                     )}
@@ -183,6 +192,38 @@ function Th({ children }: { children: React.ReactNode }) {
 
 function Td({ children }: { children: React.ReactNode }) {
   return <td className="px-4 py-3 align-top">{children}</td>;
+}
+
+function CopyButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      title="Copy connector id"
+      aria-label="Copy connector id"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(value);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1200);
+        } catch {
+          /* clipboard unavailable */
+        }
+      }}
+      className="mt-px shrink-0 text-black/35 opacity-0 transition group-hover/conn:opacity-100 hover:text-black/70 focus:opacity-100 dark:text-white/35 dark:hover:text-white/70"
+    >
+      {copied ? (
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
+          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      ) : (
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <rect x="9" y="9" width="11" height="11" rx="2" />
+          <path d="M5 15V5a2 2 0 0 1 2-2h10" strokeLinecap="round" />
+        </svg>
+      )}
+    </button>
+  );
 }
 
 function Dash() {
