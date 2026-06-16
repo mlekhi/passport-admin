@@ -29,6 +29,20 @@ export type VercelProject = {
 
 export type ConnectorResult = { id: string };
 
+export type DeploymentFile = { file: string; data: string; encoding: "base64" };
+
+export type DeployResult = { id: string; projectId: string; url: string };
+
+type VercelDeployment = {
+  id: string;
+  url: string;
+  projectId?: string;
+  alias?: string[];
+  aliasAssigned?: boolean;
+  readyState?: string;
+  status?: string;
+};
+
 export type ProtectionStatus = {
   projectId: string;
   name: string;
@@ -83,6 +97,81 @@ export function toProtectionStatus(project: VercelProject): ProtectionStatus {
 export async function listProtectionStatus(): Promise<ProtectionStatus[]> {
   const projects = await listProjects();
   return projects.map(toProtectionStatus);
+}
+
+// Deploy a set of static files as their own Vercel project, then wait for the
+// production alias. Returns once a production URL exists (never a preview URL).
+export async function createProjectAndDeploy(
+  files: DeploymentFile[],
+  opts: { name?: string; pollIntervalMs?: number; maxAttempts?: number } = {},
+): Promise<DeployResult> {
+  const token = requiredEnv("VERCEL_ACCESS_TOKEN");
+  const name = opts.name ?? generateProjectName();
+
+  const deployment = await vercel<VercelDeployment>(
+    apiPath("/v13/deployments", teamScope()),
+    {
+      method: "POST",
+      body: JSON.stringify({
+        name,
+        project: name,
+        files,
+        target: "production",
+        projectSettings: { framework: null, buildCommand: null, outputDirectory: "." },
+      }),
+    },
+    token,
+  );
+
+  const projectId = requireProjectId(deployment);
+  const url = await waitForProductionUrl(deployment.id, opts);
+  return { id: deployment.id, projectId, url };
+}
+
+async function waitForProductionUrl(
+  deploymentId: string,
+  opts: { pollIntervalMs?: number; maxAttempts?: number } = {},
+): Promise<string> {
+  const interval = opts.pollIntervalMs ?? 2000;
+  const maxAttempts = opts.maxAttempts ?? 30;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const deployment = await getDeployment(deploymentId);
+    const productionAlias = deployment.alias?.find((alias) => alias !== deployment.url);
+
+    if (deployment.aliasAssigned && productionAlias) return asHttpsUrl(productionAlias);
+
+    const state = deployment.readyState ?? deployment.status;
+    if (state === "ERROR" || state === "CANCELED") {
+      throw new Error(`Deployment ${deploymentId} finished with state ${state}; no production URL was assigned.`);
+    }
+
+    await sleep(interval);
+  }
+
+  throw new Error(
+    `Timed out waiting for production alias for deployment ${deploymentId}. Refusing to return a preview URL.`,
+  );
+}
+
+async function getDeployment(deploymentId: string): Promise<VercelDeployment> {
+  const token = requiredEnv("VERCEL_ACCESS_TOKEN");
+  return vercel<VercelDeployment>(
+    apiPath(`/v13/deployments/${encodeURIComponent(deploymentId)}`, teamScope()),
+    { method: "GET" },
+    token,
+  );
+}
+
+function requireProjectId(deployment: VercelDeployment): string {
+  if (!deployment.projectId) {
+    throw new Error("Deployment response did not include projectId; cannot link a connector.");
+  }
+  return deployment.projectId;
+}
+
+function generateProjectName(): string {
+  return `app-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 export async function createConnector(connector: Json, projectId: string): Promise<ConnectorResult> {
@@ -180,4 +269,12 @@ function requiredEnv(name: string): string {
   const value = env(name);
   if (!value) throw new Error(`Missing required env var: ${name}`);
   return value;
+}
+
+function asHttpsUrl(hostOrUrl: string): string {
+  return hostOrUrl.startsWith("http://") || hostOrUrl.startsWith("https://") ? hostOrUrl : `https://${hostOrUrl}`;
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
