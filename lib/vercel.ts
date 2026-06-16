@@ -115,7 +115,9 @@ export async function listConnectors(): Promise<Connector[]> {
   const token = requiredEnv("VERCEL_ACCESS_TOKEN");
   const body = await vercel<unknown>(apiPath("/v1/connect/connectors", teamScope()), { method: "GET" }, token);
   if (Array.isArray(body)) return body as Connector[];
-  return ((body as { connectors?: Connector[] })?.connectors ?? []) as Connector[];
+  // The API wraps the list under `clients` (fall back to `connectors`/array).
+  const data = body as { clients?: Connector[]; connectors?: Connector[] };
+  return (data?.clients ?? data?.connectors ?? []) as Connector[];
 }
 
 // Join connector name + IdP host onto each status by connectorId. Pure so it's
