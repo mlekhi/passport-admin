@@ -51,3 +51,8 @@ th {
 code {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
+
+.unprotected {
+  color: #b00020;
+  font-weight: 600;
+}

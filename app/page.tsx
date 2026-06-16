@@ -35,33 +35,49 @@ export default async function DashboardHome() {
 
   const protectedCount = sites.filter((s) => s.protected).length;
 
+  const unprotectedCount = sites.length - protectedCount;
+
   return (
     <>
       <p>
-        {protectedCount} of {sites.length} microsites protected by Passport.
+        {protectedCount} of {sites.length} microsites protected by Passport
+        {unprotectedCount > 0 ? <span className="unprotected"> · {unprotectedCount} unprotected</span> : null}.
       </p>
       <table>
         <thead>
           <tr>
             <th>Microsite</th>
-            <th>Protected</th>
+            <th>URL</th>
+            <th>Protection</th>
             <th>Deployment type</th>
-            <th>Connector</th>
+            <th>Last updated</th>
           </tr>
         </thead>
         <tbody>
           {sites.map((site) => (
             <tr key={site.projectId}>
               <td>{site.name}</td>
-              <td>{site.protected ? "Yes" : "No"}</td>
-              <td>{site.deploymentType ?? "—"}</td>
               <td>
-                <code>{site.connectorId ?? "—"}</code>
+                {site.url ? (
+                  <a href={site.url} target="_blank" rel="noreferrer">
+                    {site.url}
+                  </a>
+                ) : (
+                  "—"
+                )}
               </td>
+              <td>{site.protected ? "Protected" : <span className="unprotected">Unprotected</span>}</td>
+              <td>{site.deploymentType ?? "—"}</td>
+              <td>{formatDate(site.updatedAt)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </>
   );
+}
+
+function formatDate(epochMs?: number): string {
+  if (!epochMs) return "—";
+  return new Date(epochMs).toISOString().slice(0, 10);
 }

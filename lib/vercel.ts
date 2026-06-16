@@ -24,6 +24,7 @@ export type VercelProject = {
     connectorId?: string;
     deploymentType?: PassportDeploymentType;
   } | null;
+  targets?: { production?: { alias?: string[] } };
   updatedAt?: number;
 };
 
@@ -47,6 +48,7 @@ export type ProtectionStatus = {
   projectId: string;
   name: string;
   protected: boolean;
+  url?: string;
   connectorId?: string;
   deploymentType?: PassportDeploymentType;
   updatedAt?: number;
@@ -84,10 +86,12 @@ export async function getProject(idOrName: string): Promise<VercelProject> {
 // itself rather than trusting a local flag set at deploy time.
 export function toProtectionStatus(project: VercelProject): ProtectionStatus {
   const connectorId = project.passport?.connectorId;
+  const alias = project.targets?.production?.alias?.[0];
   return {
     projectId: project.id,
     name: project.name,
     protected: Boolean(connectorId),
+    url: alias ? asHttpsUrl(alias) : undefined,
     connectorId,
     deploymentType: project.passport?.deploymentType,
     updatedAt: project.updatedAt,
