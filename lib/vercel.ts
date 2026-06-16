@@ -210,11 +210,33 @@ export async function attachPassport({
   );
 }
 
-// Link a project's Passport to an existing, IdP-wired connector (the org's one
-// connector, configured once), then read the project back and confirm it took.
-// Reuses one connector rather than creating one per deploy — Passport is a
-// 3-way binding (project → passport.connectorId → connector → IdP). Never
-// trusts the PATCH response alone; protection status comes from the read-back.
+// Create the Connect project-link (the REST behind `vercel connect attach`).
+// This registers the project's redirect_uri with the connector and grants it
+// token access — without it, Passport login fails with "redirect_uri is not
+// registered for this client". Note: this endpoint has no /v1 prefix.
+export async function linkProjectToConnector({
+  projectId,
+  connectorId,
+}: {
+  projectId: string;
+  connectorId: string;
+}): Promise<void> {
+  const token = requiredEnv("VERCEL_ACCESS_TOKEN");
+  await vercel<unknown>(
+    apiPath(
+      `/connect/connectors/${encodeURIComponent(connectorId)}/projects/${encodeURIComponent(projectId)}`,
+      teamScope(),
+    ),
+    { method: "POST" },
+    token,
+  );
+}
+
+// Protect a project end to end against an existing, IdP-wired connector (the
+// org's one connector, configured once). Two bindings are required: the Connect
+// project-link (registers redirect_uri) AND the passport attach (turns on
+// protection). Then read the project back and confirm it took — never trust the
+// PATCH response alone.
 export async function protectProject({
   projectId,
   connectorId = requiredEnv("CONNECTOR_ID"),
@@ -224,6 +246,7 @@ export async function protectProject({
   connectorId?: string;
   deploymentType?: PassportDeploymentType;
 }): Promise<ProtectionStatus> {
+  await linkProjectToConnector({ projectId, connectorId });
   await attachPassport({ idOrName: projectId, connectorId, deploymentType });
 
   const status = toProtectionStatus(await getProject(projectId));
