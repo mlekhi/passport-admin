@@ -1,5 +1,4 @@
 import { listProtectionStatus, type ProtectionStatus } from "@/lib/vercel";
-import { DeployUploader } from "./deploy-uploader";
 import { SitesTable } from "./sites-table";
 
 // Server Component — runs on the server, so the access token never reaches
@@ -44,8 +43,6 @@ export default async function DashboardHome() {
         <Metric label="Protected" value={protectedCount} tone="ok" />
         <Metric label="Unprotected" value={unprotectedCount} tone={unprotectedCount > 0 ? "warn" : "muted"} />
       </section>
-
-      <DeployUploader />
 
       <SitesTable sites={sites} />
     </div>

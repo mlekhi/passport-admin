@@ -83,7 +83,7 @@ export function DeployUploader() {
     <section className="rounded-lg border border-black/10 p-4 dark:border-white/10">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="text-sm font-semibold">Deploy microsite</h2>
+          <h3 className="text-sm font-semibold">Upload files</h3>
           <p className="mt-1 truncate text-xs text-black/50 dark:text-white/50">
             {selection ? selection.label : "No upload selected"}
           </p>
