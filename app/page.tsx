@@ -34,10 +34,11 @@ export default async function DashboardHome() {
   }
 
   const protectedCount = sites.filter((s) => s.protected).length;
+  const connectorCount = new Set(sites.map((s) => s.connectorId).filter(Boolean)).size;
 
   return (
-    <div className="space-y-12">
-      <header className="pb-4">
+    <div className="space-y-6">
+      <header>
         <h1 className="text-4xl font-medium tracking-tight" style={{ textWrap: "balance" }}>
           Passport Intranet
         </h1>
@@ -46,9 +47,10 @@ export default async function DashboardHome() {
         </p>
       </header>
 
-      <section className="grid grid-cols-2 gap-3" aria-label="Summary">
+      <section className="grid grid-cols-3 gap-3" aria-label="Summary">
         <Metric label="Microsites" value={sites.length} />
         <Metric label="Protected" value={protectedCount} />
+        <Metric label="IDP Connectors" value={connectorCount} />
       </section>
 
       <SitesTable sites={sites} />
