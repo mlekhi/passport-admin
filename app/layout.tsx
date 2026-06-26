@@ -28,6 +28,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
         </header>
         <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
+        <footer className="border-t border-black/10 px-6 py-4 dark:border-white/10">
+          <div className="flex items-center justify-between text-xs text-black/40 dark:text-white/40">
+            <span>Made with love by Maya.</span>
+            <a
+              href="https://vercel.com/dashboard"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-black/70 dark:hover:text-white/70 transition-colors"
+            >
+              Passports are live on Vercel Dashboard.
+            </a>
+          </div>
+        </footer>
       </body>
     </html>
   );
