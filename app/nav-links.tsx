@@ -17,18 +17,18 @@ export function NavLinks() {
         </div>
         <span className="min-w-0 text-base font-semibold leading-tight">Passport Intranet</span>
       </Link>
-      <nav aria-label="Primary" className="flex shrink-0 items-center gap-1 text-sm">
+      <nav aria-label="Primary" className="flex shrink-0 items-center gap-4 text-sm">
         <Link
           href="/"
           aria-current={pathname === "/" ? "page" : undefined}
-          className="rounded-md px-3 py-1.5 text-black/60 transition-colors hover:bg-black/5 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white dark:focus-visible:ring-white/30"
+          className="text-black/50 transition-colors hover:text-black focus-visible:outline-none dark:text-white/50 dark:hover:text-white"
         >
           Dashboard
         </Link>
         <Link
           href="/deploy"
           aria-current={pathname === "/deploy" ? "page" : undefined}
-          className="rounded-md bg-black px-3 py-1.5 font-medium text-white transition-colors hover:bg-black/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/50 dark:bg-white dark:text-black dark:hover:bg-white/80 dark:focus-visible:ring-white/50"
+          className="text-black/50 transition-colors hover:text-black focus-visible:outline-none dark:text-white/50 dark:hover:text-white"
         >
           Deploy
         </Link>
