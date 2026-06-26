@@ -34,14 +34,23 @@ export default async function DashboardHome() {
   }
 
   const protectedCount = sites.filter((s) => s.protected).length;
-  const unprotectedCount = sites.length - protectedCount;
+  const connectorCount = new Set(sites.map((s) => s.connectorId).filter(Boolean)).size;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      <header>
+        <h1 className="text-4xl font-medium tracking-tight" style={{ textWrap: "balance" }}>
+          Passport Intranet
+        </h1>
+        <p className="mt-2 text-sm text-black/50 dark:text-white/50">
+          Passport-protected microsites, deployed and monitored from one place.
+        </p>
+      </header>
+
       <section className="grid grid-cols-3 gap-3" aria-label="Summary">
         <Metric label="Microsites" value={sites.length} />
-        <Metric label="Protected" value={protectedCount} tone="ok" />
-        <Metric label="Unprotected" value={unprotectedCount} tone={unprotectedCount > 0 ? "warn" : "muted"} />
+        <Metric label="Protected" value={protectedCount} />
+        <Metric label="IDP Connectors" value={connectorCount} />
       </section>
 
       <SitesTable sites={sites} />
@@ -49,25 +58,11 @@ export default async function DashboardHome() {
   );
 }
 
-function Metric({
-  label,
-  value,
-  tone = "default",
-}: {
-  label: string;
-  value: number;
-  tone?: "default" | "ok" | "warn" | "muted";
-}) {
-  const valueTone =
-    tone === "ok"
-      ? "text-emerald-600 dark:text-emerald-400"
-      : tone === "warn"
-        ? "text-amber-600 dark:text-amber-400"
-        : "";
+function Metric({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <div className="text-xs uppercase tracking-wide text-black/50 dark:text-white/50">{label}</div>
-      <div className={`mt-1 text-2xl font-semibold tabular-nums ${valueTone}`}>{value}</div>
+    <div className="rounded-lg border border-black/10 p-5 dark:border-white/10">
+      <div className="text-sm text-black/50 dark:text-white/50">{label}</div>
+      <div className="mt-2 text-4xl font-normal tabular-nums">{value}</div>
     </div>
   );
 }
