@@ -68,7 +68,7 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
             <col className="w-[13%]" />
           </colgroup>
           <thead>
-            <tr className="border-b border-black/10 text-left text-xs uppercase tracking-wide text-black/50 dark:border-white/10 dark:text-white/50">
+            <tr className="border-b border-black/10 text-left text-xs text-black/50 dark:border-white/10 dark:text-white/50">
               <Th>Microsite</Th>
               <Th>URL</Th>
               <Th>Passport</Th>
