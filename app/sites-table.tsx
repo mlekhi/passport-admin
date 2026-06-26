@@ -65,10 +65,10 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
         <table className="w-full table-fixed text-sm" aria-label="Microsites protection status">
           <colgroup>
             <col className="w-[22%]" />
-            <col className="w-[28%]" />
-            <col className="w-[28%]" />
+            <col className="w-[26%]" />
+            <col className="w-[26%]" />
             <col className="w-[12%]" />
-            <col className="w-[10%]" />
+            <col className="w-[14%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-black/10 text-left text-sm text-black/50 dark:border-white/10 dark:text-white/50">
