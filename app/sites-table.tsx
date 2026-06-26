@@ -119,7 +119,7 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                   </Td>
                   <Td>
                     {site.protected && site.connectorId ? (
-                      <div className="group/conn flex items-start gap-1.5">
+                      <div className="flex items-start gap-1.5">
                         <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                         <div className="min-w-0">
                           {site.connectorName ? (
@@ -136,7 +136,6 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                               {site.connectorId.slice(0, 14)}…
                             </span>
                           )}
-                          <CopyButton value={site.connectorId} />
                         </div>
                       </div>
                     ) : (
@@ -188,37 +187,6 @@ function Td({ children }: { children: React.ReactNode }) {
   return <td className="px-4 py-3 align-top">{children}</td>;
 }
 
-function CopyButton({ value }: { value: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <button
-      type="button"
-      title="Copy connector id"
-      aria-label="Copy connector id"
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(value);
-          setCopied(true);
-          setTimeout(() => setCopied(false), 1200);
-        } catch {
-          /* clipboard unavailable */
-        }
-      }}
-      className="mt-px shrink-0 text-black/35 opacity-0 transition group-hover/conn:opacity-100 hover:text-black/70 focus:opacity-100 dark:text-white/35 dark:hover:text-white/70"
-    >
-      {copied ? (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
-          <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      ) : (
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-          <rect x="9" y="9" width="11" height="11" rx="2" />
-          <path d="M5 15V5a2 2 0 0 1 2-2h10" strokeLinecap="round" />
-        </svg>
-      )}
-    </button>
-  );
-}
 
 function FrameworkBadge({ framework }: { framework?: string | null }) {
   if (framework === "nextjs") {
