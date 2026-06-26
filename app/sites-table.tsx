@@ -64,19 +64,17 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
       <div className="overflow-hidden rounded-lg border border-black/10 dark:border-white/10">
         <table className="w-full table-fixed text-sm" aria-label="Microsites protection status">
           <colgroup>
-            <col className="w-[18%]" />
-            <col className="w-[26%]" />
-            <col className="w-[13%]" />
-            <col className="w-[17%]" />
-            <col className="w-[13%]" />
-            <col className="w-[13%]" />
+            <col className="w-[22%]" />
+            <col className="w-[28%]" />
+            <col className="w-[28%]" />
+            <col className="w-[12%]" />
+            <col className="w-[10%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-black/10 text-left text-sm text-black/50 dark:border-white/10 dark:text-white/50">
               <Th>Microsite</Th>
               <Th>URL</Th>
               <Th>Passport</Th>
-              <Th>Connector</Th>
               <Th>Status</Th>
               <Th>Updated</Th>
             </tr>
@@ -84,7 +82,7 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-sm text-black/45 dark:text-white/45">
+                <td colSpan={5} className="px-4 py-8 text-center text-sm text-black/45 dark:text-white/45">
                   No microsites match.
                 </td>
               </tr>
@@ -120,15 +118,13 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                     )}
                   </Td>
                   <Td>
-                    <ProtectionBadge protectedSite={site.protected} />
-                  </Td>
-                  <Td>
-                    {site.connectorId ? (
+                    {site.protected && site.connectorId ? (
                       <div className="group/conn flex items-start gap-1.5">
+                        <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                         <div className="min-w-0">
                           {site.connectorName ? (
                             <>
-                              <div className="text-sm font-medium">{site.connectorName}</div>
+                              <div className="font-medium">{site.connectorName}</div>
                               {site.connectorIdp ? (
                                 <div className="font-mono text-[11px] text-black/45 dark:text-white/45">
                                   {site.connectorIdp}
@@ -140,11 +136,14 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                               {site.connectorId.slice(0, 14)}…
                             </span>
                           )}
+                          <CopyButton value={site.connectorId} />
                         </div>
-                        <CopyButton value={site.connectorId} />
                       </div>
                     ) : (
-                      <Dash />
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                        Unprotected
+                      </span>
                     )}
                   </Td>
                   <Td>
@@ -164,22 +163,6 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
 }
 
 
-function ProtectionBadge({ protectedSite }: { protectedSite: boolean }) {
-  if (!protectedSite) {
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm">
-        <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-        Unprotected
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center gap-1.5 text-sm">
-      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-      Protected
-    </span>
-  );
-}
 
 function DeployState({ state }: { state?: string }) {
   if (!state) return <Dash />;
