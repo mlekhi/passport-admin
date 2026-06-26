@@ -34,7 +34,6 @@ export default async function DashboardHome() {
   }
 
   const protectedCount = sites.filter((s) => s.protected).length;
-  const unprotectedCount = sites.length - protectedCount;
 
   return (
     <div className="space-y-12">
@@ -47,10 +46,9 @@ export default async function DashboardHome() {
         </p>
       </header>
 
-      <section className="grid grid-cols-3 gap-3" aria-label="Summary">
+      <section className="grid grid-cols-2 gap-3" aria-label="Summary">
         <Metric label="Microsites" value={sites.length} />
         <Metric label="Protected" value={protectedCount} />
-        <Metric label="Unprotected" value={unprotectedCount} />
       </section>
 
       <SitesTable sites={sites} />
