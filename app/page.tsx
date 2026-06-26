@@ -74,9 +74,9 @@ function Metric({
         ? "text-amber-600 dark:text-amber-400"
         : "";
   return (
-    <div className="rounded-lg border border-black/10 p-4 dark:border-white/10">
-      <div className="text-xs uppercase tracking-wide text-black/50 dark:text-white/50">{label}</div>
-      <div className={`mt-1 text-2xl font-semibold tabular-nums ${valueTone}`}>{value}</div>
+    <div className="rounded-lg border border-black/10 p-5 dark:border-white/10">
+      <div className="text-sm text-black/50 dark:text-white/50">{label}</div>
+      <div className={`mt-2 text-4xl font-bold tabular-nums ${valueTone}`}>{value}</div>
     </div>
   );
 }
