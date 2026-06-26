@@ -44,17 +44,16 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
             className="h-10 w-full rounded-full border border-black/15 bg-transparent pl-10 pr-4 text-sm placeholder:text-black/40 focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:placeholder:text-white/40 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
           />
         </div>
-        <div className="flex items-center gap-1">
-          <FilterButton active={status === "all"} onClick={() => setStatus("all")}>
-            All
-          </FilterButton>
-          <FilterButton active={status === "protected"} onClick={() => setStatus("protected")}>
-            Protected
-          </FilterButton>
-          <FilterButton active={status === "unprotected"} onClick={() => setStatus("unprotected")}>
-            Unprotected
-          </FilterButton>
-        </div>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value as StatusFilter)}
+          aria-label="Filter by protection status"
+          className="h-10 rounded-full border border-black/15 bg-transparent px-4 text-sm focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
+        >
+          <option value="all">All</option>
+          <option value="protected">Protected</option>
+          <option value="unprotected">Unprotected</option>
+        </select>
       </div>
 
       <div className="overflow-hidden rounded-lg border border-black/10 dark:border-white/10">
@@ -157,23 +156,6 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
   );
 }
 
-function FilterButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={
-        "h-8 rounded-md px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 dark:focus-visible:ring-white/30 " +
-        (active
-          ? "bg-black text-white dark:bg-white dark:text-black"
-          : "text-black/60 hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/10")
-      }
-    >
-      {children}
-    </button>
-  );
-}
 
 function ProtectionBadge({ protectedSite }: { protectedSite: boolean }) {
   if (!protectedSite) {
