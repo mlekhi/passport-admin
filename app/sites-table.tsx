@@ -30,7 +30,7 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
           Search microsites
         </label>
         <div className="relative flex-1 min-w-50">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-black/40 dark:text-white/40">
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
@@ -41,14 +41,14 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search microsites…"
-            className="h-10 w-full rounded-full border border-black/15 bg-transparent pl-10 pr-4 text-sm placeholder:text-black/40 focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:placeholder:text-white/40 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
+            className="h-10 w-full rounded-lg border border-black/15 bg-transparent pl-9 pr-4 text-sm placeholder:text-black/40 focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:placeholder:text-white/40 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
           />
         </div>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value as StatusFilter)}
           aria-label="Filter by protection status"
-          className="h-10 rounded-full border border-black/15 bg-transparent px-4 text-sm focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
+          className="h-10 rounded-lg border border-black/15 bg-transparent px-4 text-sm focus:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/20 dark:border-white/15 dark:focus:border-white/30 dark:focus-visible:ring-white/20"
         >
           <option value="all">All</option>
           <option value="protected">Protected</option>
