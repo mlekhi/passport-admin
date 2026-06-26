@@ -49,8 +49,8 @@ export default async function DashboardHome() {
 
       <section className="grid grid-cols-3 gap-3" aria-label="Summary">
         <Metric label="Microsites" value={sites.length} />
-        <Metric label="Protected" value={protectedCount} tone="ok" />
-        <Metric label="Unprotected" value={unprotectedCount} tone={unprotectedCount > 0 ? "warn" : "muted"} />
+        <Metric label="Protected" value={protectedCount} />
+        <Metric label="Unprotected" value={unprotectedCount} />
       </section>
 
       <SitesTable sites={sites} />
@@ -58,25 +58,11 @@ export default async function DashboardHome() {
   );
 }
 
-function Metric({
-  label,
-  value,
-  tone = "default",
-}: {
-  label: string;
-  value: number;
-  tone?: "default" | "ok" | "warn" | "muted";
-}) {
-  const valueTone =
-    tone === "ok"
-      ? "text-emerald-600 dark:text-emerald-400"
-      : tone === "warn"
-        ? "text-amber-600 dark:text-amber-400"
-        : "";
+function Metric({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-lg border border-black/10 p-5 dark:border-white/10">
       <div className="text-sm text-black/50 dark:text-white/50">{label}</div>
-      <div className={`mt-2 text-4xl font-bold tabular-nums ${valueTone}`}>{value}</div>
+      <div className="mt-2 text-4xl font-semibold tabular-nums">{value}</div>
     </div>
   );
 }
