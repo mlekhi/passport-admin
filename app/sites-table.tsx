@@ -219,7 +219,7 @@ function CopyButton({ value }: { value: string }) {
   );
 }
 
-function FrameworkBadge({ framework }: { framework?: string }) {
+function FrameworkBadge({ framework }: { framework?: string | null }) {
   if (framework === "nextjs") {
     return (
       <svg width="14" height="14" viewBox="0 0 180 180" fill="none" aria-label="Next.js" className="text-black/50 dark:text-white/50">
