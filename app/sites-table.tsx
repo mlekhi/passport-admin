@@ -191,14 +191,25 @@ function Td({ children }: { children: React.ReactNode }) {
 function FrameworkBadge({ framework }: { framework?: string | null }) {
   if (framework === "nextjs") {
     return (
-      <svg width="13" height="13" viewBox="0 0 180 180" fill="none" aria-label="Next.js">
-        <circle cx="90" cy="90" r="90" fill="white" />
-        <path d="M149.508 157.52L69.142 54H54V125.97H66.1V69.3L139.986 164.845C143.242 162.481 146.395 159.985 149.508 157.52Z" fill="black" />
-        <rect x="115" y="54" width="12" height="72" fill="black" />
+      <svg width="14" height="14" viewBox="0 0 180 180" fill="none" aria-label="Next.js">
+        <circle cx="90" cy="90" r="87" stroke="white" strokeWidth="6" />
+        <path d="M149.508 157.52L69.142 54H54V125.97H66.1V69.3L139.986 164.845C143.242 162.481 146.395 159.985 149.508 157.52Z" fill="white" />
+        <rect x="115" y="54" width="12" height="72" fill="white" />
       </svg>
     );
   }
-  return <span className="text-sm text-black/45 dark:text-white/45">{framework ?? "static"}</span>;
+  if (framework === "static" || !framework) {
+    return (
+      <svg width="14" height="14" viewBox="0 0 512 512" aria-label="HTML5">
+        <path d="M108.4 0h23v22.8h21.2V0h23v69h-23V46h-21v23h-23.2V0zm89.5 0h25.5l15.6 25.6L254.6 0H280v69h-23V34.8l-16.9 26.1-16.9-26.1V69h-22.8V0zm64.4 0h24v46.2h32.6V69h-56.6V0z" fill="#e44d26" />
+        <path d="M107.6 471l-33-370.4h362.8l-33 370.2L255.7 512z" fill="#e44d26" />
+        <path d="M256 480.5V131h148.3L376 447z" fill="#f16529" />
+        <path d="M142 176.3h114v45.4h-64.2l4.2 46.5h60v45.3H154.4zm.9 93.2H188l3.2 36.3 64.8 17.5v47.3l-118.4-33z" fill="#fff" />
+        <path d="M369.6 176.3H255.9v45.4h109.6zm-4.1 46.5h-105.6l4.2 45.3h101.4zm-8.5 94.8l-.3 2.9-26.3 7.1-26.2-7.1v-1.2h-45.2l8.5 94.7 63 17.5 63.2-17.5 8.6-96.4z" fill="#ebebeb" />
+      </svg>
+    );
+  }
+  return <span className="text-sm text-black/45 dark:text-white/45">{framework}</span>;
 }
 
 function Dash() {
