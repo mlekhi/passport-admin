@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Passport Admin",
+  title: "Passport Intranet",
   description: "Central dashboard for Passport-protected microsites.",
 };
 
