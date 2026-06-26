@@ -91,7 +91,7 @@ export function SitesTable({ sites }: { sites: ProtectionStatus[] }) {
                 >
                   <Td>
                     <div className="font-medium">{site.name}</div>
-                    <div className="text-xs text-black/45 dark:text-white/45">{site.framework ?? "static"}</div>
+                    <div className="mt-0.5"><FrameworkBadge framework={site.framework} /></div>
                   </Td>
                   <Td>
                     {site.url ? (
@@ -223,6 +223,24 @@ function CopyButton({ value }: { value: string }) {
       )}
     </button>
   );
+}
+
+function FrameworkBadge({ framework }: { framework?: string }) {
+  if (framework === "nextjs") {
+    return (
+      <svg width="14" height="14" viewBox="0 0 180 180" fill="none" aria-label="Next.js" className="text-black/50 dark:text-white/50">
+        <mask id="nxt-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180" style={{ maskType: "alpha" }}>
+          <circle cx="90" cy="90" r="90" fill="currentColor" />
+        </mask>
+        <g mask="url(#nxt-mask)">
+          <circle cx="90" cy="90" r="90" fill="currentColor" />
+          <path d="M149.508 157.52L69.142 54H54V125.97H66.1V69.3L139.986 164.845C143.242 162.481 146.395 159.985 149.508 157.52Z" fill="white" />
+          <rect x="115" y="54" width="12" height="72" fill="white" />
+        </g>
+      </svg>
+    );
+  }
+  return <span className="text-xs text-black/45 dark:text-white/45">{framework ?? "static"}</span>;
 }
 
 function Dash() {
